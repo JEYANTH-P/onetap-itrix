@@ -1,16 +1,28 @@
-import  Map from '../components/map'
-import WebcamCapture from '../components/cam'
-
+import React, { useState } from 'react';
+import Map from '../components/map';
+import WebcamCapture from '../components/cam';
 
 function Home() {
-  return (
-    <>  
-        <Map />
-        <div>Home</div>
-        <WebcamCapture />
-    </>
+  const [isCapturing, setIsCapturing] = useState(false);
 
-  )
+  const startCapture = () => {
+    setIsCapturing(true);
+  };
+
+  return (
+    <>
+      {!isCapturing && (
+        <>
+          <Map />
+          <div>Home</div>
+          <button onClick={startCapture} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Start Capture
+          </button>
+        </>
+      )}
+      {isCapturing && <WebcamCapture />}
+    </>
+  );
 }
 
-export default Home
+export default Home;
