@@ -6,6 +6,8 @@ import ImageRecognitionComponent from '@/components/imgrec';
 function Home() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [textInput, setTextInput] = useState('');
+
 
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -20,11 +22,14 @@ function Home() {
   const sendpic = () => {
     // Pass the capturedImage to the ImageRecognitionComponent
     if (capturedImage) {
-      return <ImageRecognitionComponent imgur={capturedImage} />;
+      return <ImageRecognitionComponent imgur={capturedImage} description={textInput} />;
     }
     return null;
   };
 
+  const handleTextChange = (e) => {
+    setTextInput(e.target.value);
+  };
   return (
     <>
       <Map />
@@ -41,6 +46,13 @@ function Home() {
           <button onClick={retakePhoto} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
             Retake Photo
           </button>
+          <input
+            type="text"
+            value={textInput}
+            onChange={handleTextChange}
+            placeholder="Enter text here"
+            className="mt-2 p-2 border border-gray-300 rounded"
+          />
           {sendpic()}
         </div>
       )}

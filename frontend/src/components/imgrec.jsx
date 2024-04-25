@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as tmImage from '@teachablemachine/image';
 
-const ImageRecognitionComponent = ({ imgur }) => {
+const ImageRecognitionComponent = ({ imgur, description }) => {
     const [model, setModel] = useState(null);
     const [maxPredictions, setMaxPredictions] = useState(0);
     const [predictionResult, setPredictionResult] = useState([]);
@@ -33,6 +33,18 @@ const ImageRecognitionComponent = ({ imgur }) => {
         predictImage();
     }, [model, imgur]);
 
+    useEffect(() => {
+        const combinedData = {
+            predictionResult: predictionResult,
+            imgur: imgur,
+            description: description
+        };
+        console.log("Combined Data:", combinedData);
+        // Convert combinedData to JSON format
+        const combinedDataJSON = JSON.stringify(combinedData);
+        console.log("Combined Data (JSON format):", combinedDataJSON);
+    }, [predictionResult, imgur, description]);
+    
     return (
         <div>
             <h2>Prediction Results:</h2>
