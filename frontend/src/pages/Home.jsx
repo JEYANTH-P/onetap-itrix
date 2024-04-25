@@ -1,9 +1,9 @@
-import  Map from '../components/map'
+import  userLocation from '../components/userLocation'
 import Cam from '../components/cam'
 function Home() {
   return (
     <>
-        <Map />
+        <userLocation />
         <div>Home</div>
         <Cam />
     </>
