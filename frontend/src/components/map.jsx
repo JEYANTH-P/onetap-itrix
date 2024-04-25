@@ -7,7 +7,7 @@ import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 
 
 
-function Map({ point }) {
+function Map() {
   const Zones = 
     {
       "type": "FeatureCollection",
@@ -244,7 +244,7 @@ function Map({ point }) {
       
       
   };
-  const point = [ 80.21898739544507,13.002638560440905 ]; 
+  const point = [ 80.21898739544507,13.002638560440905];
   useEffect(() => {
     
     const zone = findZone(point, Zones);
@@ -277,7 +277,7 @@ function Map({ point }) {
 
   return (
     <>
-      <MapContainer center={point} zoom={13} style={{ height: "600px", width: "600px" }}>
+      <MapContainer center={[13.002638560440905, 80.21898739544507 ]} zoom={13} style={{ height: "600px", width: "600px" }}>
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -291,7 +291,7 @@ function Map({ point }) {
             weight: 1, // Change line thickness
           })}/>
 
-        <Marker position={point}  />
+        <Marker position={[ 13.002638560440905, 80.21898739544507 ]}  />
       </MapContainer>
     </>
   )
