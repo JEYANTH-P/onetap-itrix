@@ -1,36 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import * as tf from '@tensorflow/tfjs';
-import * as mobilenet from '@tensorflow-models/mobilenet';
+import * as tmImage from '@teachablemachine/image';
 
 const ImageRecognitionComponent = ({ imgur }) => {
-  const [prediction, setPrediction] = useState('');
+    const [model, setModel] = useState(null);
+    const [maxPredictions, setMaxPredictions] = useState(0);
+    const [predictionResult, setPredictionResult] = useState([]);
 
-  useEffect(() => {
-    const image = new Image();
-    image.src = imgur;
-    image.crossOrigin = "anonymous"; // Add this line to handle CORS issues
+    useEffect(() => {
+        const URL = "https://teachablemachine.withgoogle.com/models/pOUP0AL27/";
+        const init = async () => {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
 
-    let model;
-    async function loadModelAndPredict() {
-      model = await mobilenet.load();
-      const predictions = await model.classify(image);
-      setPrediction(predictions[0].className);
-    }
+            const loadedModel = await tmImage.load(modelURL, metadataURL);
+            setModel(loadedModel);
+            setMaxPredictions(loadedModel.getTotalClasses());
+        };
 
-    if (imgur) {
-      loadModelAndPredict();
-    }
+        init();
+    }, []);
 
-    return () => {
-      model = null;
-    };
-  }, [imgur]);
+    useEffect(() => {
+        const predictImage = async () => {
+            if (model && imgur) {
+                const imageElement = document.createElement('img');
+                imageElement.src = imgur;
+                const prediction = await model.predict(imageElement);
+                setPredictionResult(prediction);
+            }
+        };
 
-  return (
-    <div>
-      {prediction && <p>Prediction: {prediction}</p>}
-    </div>
-  );
+        predictImage();
+    }, [model, imgur]);
+
+    return (
+        <div>
+            <h2>Prediction Results:</h2>
+            <ul>
+                {predictionResult.map((prediction, index) => (
+                    <li key={index}>
+                        {prediction.className}: {prediction.probability.toFixed(2)}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default ImageRecognitionComponent;
