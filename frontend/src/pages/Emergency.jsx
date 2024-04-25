@@ -1,13 +1,10 @@
 
-import WebcamCapture from '../components/cam'
-import UserLocation from '../components/userLocation'
-
+import { Button } from "@/components/ui/button"; 
 
 function Emergency() {
   return (
     <>  
-        <UserLocation />
-      <WebcamCapture />
+        <Button onClick={() => window.open("https://rishi-kumar18.github.io/emergencyrepo/", "_blank")}>Ambulance</Button>
     </>
   )
 }
