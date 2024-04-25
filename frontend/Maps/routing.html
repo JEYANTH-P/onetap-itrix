@@ -118,36 +118,44 @@
   <script>
 
 const vehicles = [
-{ 
+
+  { 
     "id": "A", 
     "location": { "latitude": 12.9867, "longitude": 80.1783 }, 
-    "accessTime": "08:00" 
+    "accessTime": "08:00",
+    "phoneNumber": "1234567890"
   },
   { 
     "id": "B", 
     "location": { "latitude": 12.9814, "longitude": 80.1885 }, 
-    "accessTime": "09:30" 
+    "accessTime": "09:30",
+    "phoneNumber": "2345678901"
   },
   { 
     "id": "C", 
     "location": { "latitude": 13.0507, "longitude": 80.2129 }, 
-    "accessTime": "10:00" 
+    "accessTime": "10:00",
+    "phoneNumber": "3456789012"
   },
   { 
     "id": "D", 
     "location": { "latitude": 13.0972, "longitude": 80.1636 }, 
-    "accessTime": "11:30" 
+    "accessTime": "11:30",
+    "phoneNumber": "4567890123"
   },
   { 
     "id": "E", 
     "location": { "latitude": 35.6895, "longitude": 139.6917 }, 
-    "accessTime": "12:00" 
+    "accessTime": "12:00",
+    "phoneNumber": "5678901234"
   },
   { 
     "id": "F", 
     "location": { "latitude": 12.9900, "longitude": 80.1690 }, 
-    "accessTime": "12:30" 
+    "accessTime": "12:30",
+    "phoneNumber": "6789012345"
   }
+
 ];
     var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -185,7 +193,7 @@ const vehicles = [
     // Add routing control
     var routingControl;
 
-    function updateRoute(source, destination) {
+    function updateRoute(source, destination, nearestvehicle) {
       if (routingControl) {
         map.removeControl(routingControl);
       }
@@ -204,7 +212,7 @@ const vehicles = [
           destinationMarker = null;
         }
       });
-
+      makePhoneCall(nearestvehicle);
       routingControl.addTo(map);
       routingControl.route();
     }
@@ -252,6 +260,11 @@ const vehicles = [
     function locateMe() {
       map.locate({ setView: true, maxZoom: 16 });
     }
+
+    function makePhoneCall(phoneNumber) {
+  window.open('tel:' + phoneNumber);
+}
+
 
     // Event listener for when user's location is found
     map.on('locationfound', function(e) {
@@ -303,7 +316,7 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
     var nearestvehicle = findClosestVehicleWithEarlyAccess(sourceInput, vehicles);
     var destinationInput = L.latLng(nearestvehicle.location.latitude, nearestvehicle.location.longitude); // Hardcoded destination coordinates
     // Update the route
-    updateRoute(sourceInput, destinationInput);
+    updateRoute(sourceInput, destinationInput, nearestvehicle.phoneNumber);
     // Close the modal
     $('#directionModal').modal('hide');
   } else {
@@ -371,36 +384,45 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
     control.addTo(map);
        // Sample JSON data with charging station information
        var ambulance =[
-        { 
+       
+  { 
     "id": "A", 
     "location": { "latitude": 12.9867, "longitude": 80.1783 }, 
-    "accessTime": "08:00" 
+    "accessTime": "08:00",
+    "phoneNumber": "1234567890"
   },
   { 
     "id": "B", 
     "location": { "latitude": 12.9814, "longitude": 80.1885 }, 
-    "accessTime": "09:30" 
+    "accessTime": "09:30",
+    "phoneNumber": "2345678901"
   },
   { 
     "id": "C", 
     "location": { "latitude": 13.0507, "longitude": 80.2129 }, 
-    "accessTime": "10:00" 
+    "accessTime": "10:00",
+    "phoneNumber": "3456789012"
   },
   { 
     "id": "D", 
     "location": { "latitude": 13.0972, "longitude": 80.1636 }, 
-    "accessTime": "11:30" 
+    "accessTime": "11:30",
+    "phoneNumber": "4567890123"
   },
   { 
     "id": "E", 
     "location": { "latitude": 35.6895, "longitude": 139.6917 }, 
-    "accessTime": "12:00" 
+    "accessTime": "12:00",
+    "phoneNumber": "5678901234"
   },
   { 
     "id": "F", 
     "location": { "latitude": 12.9900, "longitude": 80.1690 }, 
-    "accessTime": "12:30" 
+    "accessTime": "12:30",
+    "phoneNumber": "6789012345"
   }
+
+
   
 ]
 
@@ -412,7 +434,7 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
         iconUrl: './ambulance1.png', // URL to the EV marker image
         iconSize: [62, 62], // Adjust size as needed
         iconAnchor: [16, 32],
-        popupAnchor: [5, -32],
+        popupAnchor: [0, -32],
       });
 
       var evMarker = L.marker([station.location.latitude, station.location.longitude], { icon: evIcon }).addTo(map);
