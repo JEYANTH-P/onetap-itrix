@@ -3,24 +3,37 @@ import Map from '../components/map';
 import WebcamCapture from '../components/cam';
 
 function Home() {
-  const [isCapturing, setIsCapturing] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
 
-  const startCapture = () => {
-    setIsCapturing(true);
+  const handleCapture = (imageData) => {
+    setCapturedImage(imageData);
+    setShowCamera(false);
+  };
+
+  const retakePhoto = () => {
+    setCapturedImage(null);
+    setShowCamera(true);
   };
 
   return (
     <>
-      {!isCapturing && (
-        <>
-          <Map />
-          <div>Home</div>
-          <button onClick={startCapture} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Start Capture
-          </button>
-        </>
+      <Map />
+      <div>Home</div>
+      {!capturedImage && !showCamera && (
+        <button onClick={() => setShowCamera(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Capture Image
+        </button>
       )}
-      {isCapturing && <WebcamCapture />}
+      {showCamera && <WebcamCapture onCapture={handleCapture} />}
+      {capturedImage && (
+        <div className="mt-4">
+          <img src={capturedImage} alt="Captured" className="mx-auto" />
+          <button onClick={retakePhoto} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+            Retake Photo
+          </button>
+        </div>
+      )}
     </>
   );
 }

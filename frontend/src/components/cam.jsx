@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
 import { FaCamera, FaSync } from 'react-icons/fa';
 
-const WebcamCapture = () => {
+const WebcamCapture = ({ onCapture }) => {
   const [dimensions, setDimensions] = useState({ width: 1280, height: 720 });
   const webcamRef = useRef(null);
   const [isFrontCamera, setIsFrontCamera] = useState(true);
@@ -35,7 +35,7 @@ const WebcamCapture = () => {
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    console.log(imageSrc);
+    onCapture(imageSrc); // Pass the captured image data to the parent component
   };
 
   const switchCamera = () => {
