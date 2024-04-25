@@ -407,7 +407,7 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
 
 
     // Loop through the charging stations data and add EV icons to the map
-    mbulance.forEach(station => {
+    ambulance.forEach(station => {
       var evIcon = L.icon({
         iconUrl: './ambulance1.png', // URL to the EV marker image
         iconSize: [62, 62], // Adjust size as needed
@@ -418,7 +418,7 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
       var evMarker = L.marker([station.location.latitude, station.location.longitude], { icon: evIcon }).addTo(map);
 
       // Add a click event listener to the marker to open the modal with station name
-      evMarker.on('click', function () {
+      //evMarker.on('click', function () {
         // Set the station name in the modal content
         //document.getElementById('vehicleName').innerText = "Name:"+station.name;
         //document.getElementById('v1').innerText = "address:"+station.address;
@@ -429,8 +429,8 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
         //document.getElementById('v6').innerText = "average_rating:"+station.average_rating;
 
         // Open the modal
-        $('#vehicleModal').modal('show');
-      });
+        //$('#vehicleModal').modal('show');
+     // });
     });
     document.getElementById('submitDirection').addEventListener('click', function() {
         // Your submission logic here
