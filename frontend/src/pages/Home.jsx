@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Map from '../components/map';
 import WebcamCapture from '../components/cam';
+import ImageRecognitionComponent from '@/components/imgrec';
 
 function Home() {
   const [capturedImage, setCapturedImage] = useState(null);
@@ -14,6 +15,14 @@ function Home() {
   const retakePhoto = () => {
     setCapturedImage(null);
     setShowCamera(true);
+  };
+
+  const sendpic = () => {
+    // Pass the capturedImage to the ImageRecognitionComponent
+    if (capturedImage) {
+      return <ImageRecognitionComponent imgur={capturedImage} />;
+    }
+    return null;
   };
 
   return (
@@ -32,6 +41,7 @@ function Home() {
           <button onClick={retakePhoto} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
             Retake Photo
           </button>
+          {sendpic()}
         </div>
       )}
     </>
