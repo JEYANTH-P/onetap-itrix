@@ -86,10 +86,16 @@ app.get("/getData/:zoneNumber", (req, res) => {
     }
 });
 app.post("/map_data",(req,res)=>{
-    const dummy = req.body;
-    console.log(dummy);
+    const dummy1 = req.body;
+    console.log(dummy1);
     
 })
+app.post("/imgrec",(req,res)=>{
+    const dummy2 = req.body;
+    console.log(dummy2);
+    
+})
+
 
 // Route to retrieve user status
 app.get("/getUserStatus/:userId", (req, res) => {

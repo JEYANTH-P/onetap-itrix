@@ -7,7 +7,7 @@ function Home() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [textInput, setTextInput] = useState('');
-
+  const [imageRecognitionComponent, setImageRecognitionComponent] = useState(null);
 
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -22,14 +22,14 @@ function Home() {
   const sendpic = () => {
     // Pass the capturedImage to the ImageRecognitionComponent
     if (capturedImage) {
-      return <ImageRecognitionComponent imgur={capturedImage} description={textInput} />;
+      setImageRecognitionComponent(<ImageRecognitionComponent imgur={capturedImage} description={textInput} />);
     }
-    return null;
   };
 
   const handleTextChange = (e) => {
     setTextInput(e.target.value);
   };
+
   return (
     <>
       <Map />
@@ -53,7 +53,8 @@ function Home() {
             placeholder="Enter text here"
             className="mt-2 p-2 border border-gray-300 rounded"
           />
-          {sendpic()}
+          <button onClick={sendpic}>Send</button>
+          {imageRecognitionComponent}
         </div>
       )}
     </>
