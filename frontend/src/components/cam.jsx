@@ -1,48 +1,49 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Webcam from 'react-webcam';
+import { FaCamera, FaSync } from 'react-icons/fa';
 
 const WebcamCapture = () => {
-  const [dimensions, setDimensions] = useState({ width: 1280, height: 720 }); // Default dimensions
+  const [dimensions, setDimensions] = useState({ width: 1280, height: 720 });
   const webcamRef = useRef(null);
+  const [isFrontCamera, setIsFrontCamera] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
-      const maxWidth = window.innerWidth; // Use window's inner width
-      const maxHeight = window.innerHeight; // Use window's inner height
-      const aspectRatio = 1280 / 720; // Aspect ratio of the webcam feed (width / height)
+      const maxWidth = window.innerWidth;
+      const maxHeight = window.innerHeight;
+      const aspectRatio = 1280 / 720;
 
       let newWidth = maxWidth;
       let newHeight = maxHeight;
 
-      // Calculate new dimensions while maintaining aspect ratio
       if (maxWidth / maxHeight > aspectRatio) {
-        // If viewport width is wider
         newWidth = maxHeight * aspectRatio;
       } else {
-        // If viewport height is taller
         newHeight = maxWidth / aspectRatio;
       }
 
       setDimensions({ width: newWidth, height: newHeight });
     };
 
-    // Call handleResize initially and add event listener for resize events
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
-  const capture = React.useCallback(() => {
+  const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     console.log(imageSrc);
-  }, [webcamRef]);
+  };
+
+  const switchCamera = () => {
+    setIsFrontCamera(!isFrontCamera);
+  };
 
   return (
-    <>
+    <div className="relative w-full h-full">
       <Webcam
         audio={false}
         ref={webcamRef}
@@ -52,11 +53,19 @@ const WebcamCapture = () => {
         videoConstraints={{
           width: dimensions.width,
           height: dimensions.height,
-          facingMode: 'user',
+          facingMode: isFrontCamera ? 'user' : { exact: 'environment' },
         }}
+        className="w-full h-full"
       />
-      <button onClick={capture}>Capture photo</button>
-    </>
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center">
+        <button onClick={capture} className="bg-white p-3 rounded-full mr-4">
+          <FaCamera size={24} />
+        </button>
+        <button onClick={switchCamera} className="bg-white p-3 rounded-full">
+          <FaSync size={24} />
+        </button>
+      </div>
+    </div>
   );
 };
 
