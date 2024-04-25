@@ -244,7 +244,7 @@ function Map() {
       
       
   };
-  const point = [ 80.21898739544507,13.002638560440905];
+  const point = [ 80.21898739544507,13.002638560440905 ]; 
   useEffect(() => {
     
     const zone = findZone(point, Zones);
