@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Location</title>
+</head>
+<body>
+    <button onclick="getLocation()">Get My Location</button>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendLocation);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendLocation(position) {
+            const userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+
+            // Send location data to server
+            fetch('/api/user/location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userLocation)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to send location.');
+                }
+            })
+            .then(data => {
+                // Handle server response
+                alert('Your zone: ' + data.zone);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to send location. Please try again later.');
+            });
+        }
+    </script>
+</body>
+</html>
