@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Map from './map';
+import Cmap from './cmap';
 
 const UserLocation = () => {
     const [userLocation, setUserLocation] = useState(null);
@@ -14,13 +14,14 @@ const UserLocation = () => {
 
     const sendLocation = (position) => {
         const location = [position.coords.latitude, position.coords.longitude];
+        console.log(location);
         setUserLocation(location);
     }
 
     return (
         <div>
             <button onClick={getLocation}>Get My Location</button>
-            {userLocation && <Map point={userLocation} />}
+            {userLocation && <Cmap points={userLocation} />}
         </div>
     );
 }
