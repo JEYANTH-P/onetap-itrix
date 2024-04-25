@@ -3,11 +3,11 @@ import Map from '../components/map';
 import WebcamCapture from '../components/cam';
 import ImageRecognitionComponent from '@/components/imgrec';
 
-
-function Nonemergency() {
-  
+function Home() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [textInput, setTextInput] = useState('');
+  const [imageRecognitionComponent, setImageRecognitionComponent] = useState(null);
 
   const handleCapture = (imageData) => {
     setCapturedImage(imageData);
@@ -22,14 +22,18 @@ function Nonemergency() {
   const sendpic = () => {
     // Pass the capturedImage to the ImageRecognitionComponent
     if (capturedImage) {
-      return <ImageRecognitionComponent imgur={capturedImage} />;
+      setImageRecognitionComponent(<ImageRecognitionComponent imgur={capturedImage} description={textInput} />);
     }
-    return null;
+  };
+
+  const handleTextChange = (e) => {
+    setTextInput(e.target.value);
   };
 
   return (
     <>
       <Map />
+      <div>Home</div>
       {!capturedImage && !showCamera && (
         <button onClick={() => setShowCamera(true)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Capture Image
@@ -42,11 +46,19 @@ function Nonemergency() {
           <button onClick={retakePhoto} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
             Retake Photo
           </button>
-          {sendpic()}
+          <input
+            type="text"
+            value={textInput}
+            onChange={handleTextChange}
+            placeholder="Enter text here"
+            className="mt-2 p-2 border border-gray-300 rounded"
+          />
+          <button onClick={sendpic}>Send</button>
+          {imageRecognitionComponent}
         </div>
       )}
     </>
   );
 }
 
-export default Nonemergency;
+export default Home;
