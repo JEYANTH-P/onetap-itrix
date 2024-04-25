@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import * as tmImage from '@teachablemachine/image';
+import axios from 'axios';
 
-const ImageRecognitionComponent = ({ imgur }) => {
+const ImageRecognitionComponent = ({ imgur, description }) => {
     const [model, setModel] = useState(null);
     const [maxPredictions, setMaxPredictions] = useState(0);
     const [predictionResult, setPredictionResult] = useState([]);
@@ -33,6 +34,31 @@ const ImageRecognitionComponent = ({ imgur }) => {
         predictImage();
     }, [model, imgur]);
 
+    useEffect(() => {
+        // Find the prediction with the highest probability
+        const maxProbabilityPrediction = predictionResult.reduce((maxPrediction, prediction) => {
+            return prediction.probability > maxPrediction.probability ? prediction : maxPrediction;
+        }, predictionResult[0]); // Initialize with the first prediction
+    
+        const combinedData = {
+            predictionResult: maxProbabilityPrediction,
+            imgur: imgur,
+            description: description
+        };
+    
+        // Convert combinedData to JSON format
+        const combinedDataJSON = JSON.stringify(combinedData);
+        console.log(combinedDataJSON)
+        // Send the combinedDataJSON to localhost:3000 using Axios
+        axios.post('http://localhost:3000/imgrec', combinedData)
+            .then(response => {
+                console.log('Data sent successfully:', response.data);
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+            });
+    }, [predictionResult, imgur, description]);
+    
     return (
         <div>
             <h2>Prediction Results:</h2>
