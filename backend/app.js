@@ -4,16 +4,21 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)
-console.log(__dirname);
-const PORT = process.env.PORT || 3000;
 
+
+const PORT = process.env.PORT || 3000;
+const app = express();
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
+app.use(cors());
 
 // Object to store user status with user ID as keys
 const userStatus = {};
+const data={};
+
 
 // Default status is 'waiting'
 const defaultStatus = 'waiting';
@@ -80,6 +85,11 @@ app.get("/getData/:zoneNumber", (req, res) => {
         res.status(404).send("Data not found for the specified zone number.");
     }
 });
+app.post("/map_data",(req,res)=>{
+    const dummy = req.body;
+    console.log(dummy);
+    
+})
 
 // Route to retrieve user status
 app.get("/getUserStatus/:userId", (req, res) => {
@@ -95,9 +105,7 @@ app.get("/getUserStatus/:userId", (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+
 
 
 

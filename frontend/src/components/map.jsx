@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, GeoJSON, Marker } from 'react-leaflet'
 import React,{ useEffect } from 'react'
 import "leaflet/dist/leaflet.css";
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
-
+import axios from 'axios';
 
 
 
@@ -246,16 +246,31 @@ function Map() {
   };
   const point = [ 80.21898739544507,13.002638560440905];
   useEffect(() => {
-    
-    const zone = findZone(point, Zones);
-    const ward = findWard(point, Wards);
-    if (zone !== null && ward!== null) {
-      console.log(zone.properties);
-      console.log(ward.properties);  // Logs the properties of the zone
-    } else {
-      console.log('Point does not reside in any zone');
-    }
+    const fetchData = async () => {
+      const zone = findZone(point, Zones);
+      const ward = findWard(point, Wards);
+      if (zone !== null && ward !== null) {
+        console.log(zone.properties);
+        console.log(ward.properties);
+  
+        try {
+          const response = await axios.post('http://localhost:3000/map_data', {
+            ward_no: ward.properties.Ward_No,
+            zone_no: ward.properties.Zone_No,
+            zone_name: ward.properties.Zone_Name
+          });
+          console.log('POST request successful:', response.data);
+        } catch (error) {
+          console.error('Error sending POST request:', error);
+        }
+      } else {
+        console.log('Point does not reside in any zone');
+      }
+    };
+  
+    fetchData();
   }, []);
+  
 
   function findZone(point, geojson) {
     for (let feature of geojson.features) {
