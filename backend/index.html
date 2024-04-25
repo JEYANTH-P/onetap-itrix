@@ -118,44 +118,22 @@
   <script>
 
 const vehicles = [
-
-  { 
-    "id": "A", 
-    "location": { "latitude": 12.9867, "longitude": 80.1783 }, 
-    "accessTime": "08:00",
-    "phoneNumber": "1234567890"
-  },
-  { 
-    "id": "B", 
-    "location": { "latitude": 12.9814, "longitude": 80.1885 }, 
-    "accessTime": "09:30",
-    "phoneNumber": "2345678901"
-  },
-  { 
-    "id": "C", 
-    "location": { "latitude": 13.0507, "longitude": 80.2129 }, 
-    "accessTime": "10:00",
-    "phoneNumber": "3456789012"
-  },
-  { 
-    "id": "D", 
-    "location": { "latitude": 13.0972, "longitude": 80.1636 }, 
-    "accessTime": "11:30",
-    "phoneNumber": "4567890123"
-  },
-  { 
-    "id": "E", 
-    "location": { "latitude": 35.6895, "longitude": 139.6917 }, 
-    "accessTime": "12:00",
-    "phoneNumber": "5678901234"
-  },
-  { 
-    "id": "F", 
-    "location": { "latitude": 12.9900, "longitude": 80.1690 }, 
-    "accessTime": "12:30",
-    "phoneNumber": "6789012345"
-  }
-
+  { id: 1, location: { latitude: 12.3456, longitude: 78.9012 }, accessTime: '08:00' },
+  { id: 2, location: { latitude: 10.1234, longitude: 77.7890 }, accessTime: '09:30' },
+  { id: 3, location: { latitude: 11.5678, longitude: 79.0123 }, accessTime: '10:00' },
+  { id: 4, location: { latitude: 9.8765, longitude: 76.5432 }, accessTime: '11:15' },
+  { id: 5, location: { latitude: 13.1234, longitude: 80.1234 }, accessTime: '12:45' },
+  // Added 10 more vehicles
+  { id: 6, location: { latitude: 8.5678, longitude: 75.3210 }, accessTime: '14:00' },
+  { id: 7, location: { latitude: 14.3456, longitude: 81.2345 }, accessTime: '15:30' },
+  { id: 8, location: { latitude: 7.9012, longitude: 74.1011 }, accessTime: '16:15' },
+  { id: 9, location: { latitude: 15.5678, longitude: 82.3456 }, accessTime: '17:00' },
+  { id: 10, location: { latitude: 6.2345, longitude: 73.8765 }, accessTime: '18:00' },
+  { id: 11, location: { latitude: 16.7890, longitude: 83.4567 }, accessTime: '19:15' },
+  { id: 12, location: { latitude: 5.5678, longitude: 72.6543 }, accessTime: '20:30' },
+  { id: 13, location: { latitude: 18.0123, longitude: 84.5678 }, accessTime: '21:45' },
+  { id: 14, location: { latitude: 4.9012, longitude: 71.4321 }, accessTime: '23:00' },
+  { id: 15, location: { latitude: 19.2345, longitude: 85.6789 }, accessTime: '00:15' },
 ];
     var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -193,7 +171,7 @@ const vehicles = [
     // Add routing control
     var routingControl;
 
-    function updateRoute(source, destination, nearestvehicle) {
+    function updateRoute(source, destination) {
       if (routingControl) {
         map.removeControl(routingControl);
       }
@@ -212,7 +190,7 @@ const vehicles = [
           destinationMarker = null;
         }
       });
-      makePhoneCall(nearestvehicle);
+
       routingControl.addTo(map);
       routingControl.route();
     }
@@ -239,20 +217,19 @@ const vehicles = [
 
     for (const vehicle of vehicles) {
       const distance = calculateDistance(
-        userLocation.lat, userLocation.lng,
+        userLocation.latitude, userLocation.longitude,
         vehicle.location.latitude, vehicle.location.longitude
       );
 
       if (distance < minDistance) {
         minDistance = distance;
         closestVehicle = vehicle;
-        
       } else if (distance === minDistance && vehicle.accessTime < (closestVehicle?.accessTime || Infinity)) {
         // If distance is equal, prioritize earlier access time
         closestVehicle = vehicle;
       }
     }
-    console.log(closestVehicle);
+
     return closestVehicle;
   }
 
@@ -260,11 +237,6 @@ const vehicles = [
     function locateMe() {
       map.locate({ setView: true, maxZoom: 16 });
     }
-
-    function makePhoneCall(phoneNumber) {
-  window.open('tel:' + phoneNumber);
-}
-
 
     // Event listener for when user's location is found
     map.on('locationfound', function(e) {
@@ -311,12 +283,10 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
 
       if (myLocationMarker) {
     var sourceInput = myLocationMarker.getLatLng();// Get user's current location
-    console.log(sourceInput);
-
     var nearestvehicle = findClosestVehicleWithEarlyAccess(sourceInput, vehicles);
     var destinationInput = L.latLng(nearestvehicle.location.latitude, nearestvehicle.location.longitude); // Hardcoded destination coordinates
     // Update the route
-    updateRoute(sourceInput, destinationInput, nearestvehicle.phoneNumber);
+    updateRoute(sourceInput, destinationInput);
     // Close the modal
     $('#directionModal').modal('hide');
   } else {
@@ -383,76 +353,32 @@ document.getElementById('start-speech-recognition').addEventListener('click', fu
     });
     control.addTo(map);
        // Sample JSON data with charging station information
-       var ambulance =[
-       
-  { 
-    "id": "A", 
-    "location": { "latitude": 12.9867, "longitude": 80.1783 }, 
-    "accessTime": "08:00",
-    "phoneNumber": "1234567890"
-  },
-  { 
-    "id": "B", 
-    "location": { "latitude": 12.9814, "longitude": 80.1885 }, 
-    "accessTime": "09:30",
-    "phoneNumber": "2345678901"
-  },
-  { 
-    "id": "C", 
-    "location": { "latitude": 13.0507, "longitude": 80.2129 }, 
-    "accessTime": "10:00",
-    "phoneNumber": "3456789012"
-  },
-  { 
-    "id": "D", 
-    "location": { "latitude": 13.0972, "longitude": 80.1636 }, 
-    "accessTime": "11:30",
-    "phoneNumber": "4567890123"
-  },
-  { 
-    "id": "E", 
-    "location": { "latitude": 35.6895, "longitude": 139.6917 }, 
-    "accessTime": "12:00",
-    "phoneNumber": "5678901234"
-  },
-  { 
-    "id": "F", 
-    "location": { "latitude": 12.9900, "longitude": 80.1690 }, 
-    "accessTime": "12:30",
-    "phoneNumber": "6789012345"
-  }
-
-
-  
-]
-
-
 
     // Loop through the charging stations data and add EV icons to the map
-    ambulance.forEach(station => {
+    chargingStations.forEach(station => {
       var evIcon = L.icon({
-        iconUrl: './ambulance1.png', // URL to the EV marker image
-        iconSize: [62, 62], // Adjust size as needed
+        iconUrl: 'https://cdn5.vectorstock.com/i/1000x1000/54/04/electric-vehicle-charging-station-icon-vector-20575404.jpg', // URL to the EV marker image
+        iconSize: [32, 32], // Adjust size as needed
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
       });
 
-      var evMarker = L.marker([station.location.latitude, station.location.longitude], { icon: evIcon }).addTo(map);
+      var evMarker = L.marker([station.latitude, station.longitude], { icon: evIcon }).addTo(map);
 
       // Add a click event listener to the marker to open the modal with station name
-      //evMarker.on('click', function () {
+      evMarker.on('click', function () {
         // Set the station name in the modal content
-        //document.getElementById('vehicleName').innerText = "Name:"+station.name;
-        //document.getElementById('v1').innerText = "address:"+station.address;
-        //document.getElementById('v2').innerText = "status:"+station.status;
-        //document.getElementById('v3').innerText = "phone:"+station.phone;
-        //document.getElementById('v4').innerText = "charge type:"+station.connectors;
-        //document.getElementById('v5').innerText = "price per kwh:"+station.price;
-        //document.getElementById('v6').innerText = "average_rating:"+station.average_rating;
+        document.getElementById('vehicleName').innerText = "Name:"+station.name;
+        document.getElementById('v1').innerText = "address:"+station.address;
+        document.getElementById('v2').innerText = "status:"+station.status;
+        document.getElementById('v3').innerText = "phone:"+station.phone;
+        document.getElementById('v4').innerText = "charge type:"+station.connectors;
+        document.getElementById('v5').innerText = "price per kwh:"+station.price;
+        document.getElementById('v6').innerText = "average_rating:"+station.average_rating;
 
         // Open the modal
-        //$('#vehicleModal').modal('show');
-     // });
+        $('#vehicleModal').modal('show');
+      });
     });
     document.getElementById('submitDirection').addEventListener('click', function() {
         // Your submission logic here
